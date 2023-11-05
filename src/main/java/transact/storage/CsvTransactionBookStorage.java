@@ -1,5 +1,7 @@
 package transact.storage;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,16 +29,17 @@ import transact.model.transaction.info.TransactionType;
 /**
  * A class to access TransactionBook data stored as a csv file on the hard disk.
  */
-public class CsvAdaptedTransactionStorage implements TransactionBookStorage {
+public class CsvTransactionBookStorage implements TransactionBookStorage {
 
     private Path filePath;
 
     /**
      * Creates CsvAdaptedTransactionStorage Object
      *
-     * @param filePath for storage data
+     * @param filePath
+     *            for storing data
      */
-    public CsvAdaptedTransactionStorage(Path filePath) {
+    public CsvTransactionBookStorage(Path filePath) {
         this.filePath = filePath;
     }
 
@@ -52,11 +55,13 @@ public class CsvAdaptedTransactionStorage implements TransactionBookStorage {
 
     @Override
     public Optional<ReadOnlyTransactionBook> readTransactionBook(Path path) throws DataLoadingException {
-        try {
-            if (!Files.exists(path)) {
-                return Optional.empty();
-            }
+        requireNonNull(filePath);
 
+        if (!Files.exists(path)) {
+            return Optional.empty();
+        }
+
+        try {
             TransactionBook transactions = new TransactionBook();
 
             CSVReader reader = new CSVReader(new FileReader(path.toFile()));
@@ -81,12 +86,11 @@ public class CsvAdaptedTransactionStorage implements TransactionBookStorage {
                 } catch (Exception e) {
                     // Skip if error with a line
                     // TODO Warn user of malformed data
+                    throw new DataLoadingException(e);
                 }
             }
 
-            ReadOnlyTransactionBook transactionBook = new TransactionBook(transactions);
-
-            return Optional.of(transactionBook);
+            return Optional.of(new TransactionBook(transactions));
         } catch (IOException e) {
             throw new DataLoadingException(e);
         } catch (CsvValidationException e) {
@@ -107,25 +111,31 @@ public class CsvAdaptedTransactionStorage implements TransactionBookStorage {
      *            location of the data. Cannot be null.
      */
     public void saveTransactionBook(ReadOnlyTransactionBook transactionBook, Path filePath) throws IOException {
+        requireNonNull(transactionBook);
+        requireNonNull(filePath);
+
         FileUtil.createIfMissing(filePath);
         Map<TransactionId, Transaction> transactions = transactionBook.getTransactionMap();
-        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath.toFile()))) {
-            String[] header = { "TransactionId", "Type", "Description", "Amount", "Date", "Person" };
-            writer.writeNext(header);
 
-            for (Transaction transaction : transactions.values()) {
-                String transactionId = transaction.getTransactionId().toString();
-                String transactionType = transaction.getTransactionType().toString();
-                String description = transaction.getDescription().toString();
-                String amount = transaction.getAmount().toString();
-                String date = transaction.getDate().toString();
-                String personId = transaction.getPersonId().toString();
+        FileWriter fileWriter = new FileWriter(filePath.toFile());
+        CSVWriter writer = new CSVWriter(fileWriter);
 
-                String[] row = { transactionId, transactionType, description, amount, date, personId };
+        String[] header = { "TransactionId", "Type", "Description", "Amount", "Date", "Person" };
+        writer.writeNext(header);
 
-                writer.writeNext(row);
-            }
+        for (Transaction transaction : transactions.values()) {
+            String transactionId = transaction.getTransactionId().toString();
+            String transactionType = transaction.getTransactionType().toString();
+            String description = transaction.getDescription().toString();
+            String amount = transaction.getAmount().toString();
+            String date = transaction.getDate().toString();
+            String personId = transaction.getPersonId().toString();
+
+            String[] row = { transactionId, transactionType, description, amount, date, personId };
+
+            writer.writeNext(row);
         }
+        writer.close();
+        fileWriter.close();
     }
-
 }

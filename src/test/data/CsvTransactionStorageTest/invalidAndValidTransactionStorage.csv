@@ -1,0 +1,3 @@
+"TransactionId","Type","Description","Amount","Date","Person"
+"0","Expense","Expense 1","100.00","11/11/23","1"
+"1","Expense","Expense 2","200.00","11/11/23","2"

@@ -29,7 +29,7 @@ import transact.model.ReadOnlyAddressBook;
 import transact.model.ReadOnlyTransactionBook;
 import transact.model.UserPrefs;
 import transact.model.person.Person;
-import transact.storage.CsvAdaptedTransactionStorage;
+import transact.storage.CsvTransactionBookStorage;
 import transact.storage.JsonAddressBookStorage;
 import transact.storage.JsonUserPrefsStorage;
 import transact.storage.StorageManager;
@@ -49,7 +49,7 @@ public class LogicManagerTest {
     public void setUp() {
         JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(
                 temporaryFolder.resolve("addressBook.json"));
-        CsvAdaptedTransactionStorage transactionBookStorage = new CsvAdaptedTransactionStorage(
+        CsvTransactionBookStorage transactionBookStorage = new CsvTransactionBookStorage(
                 temporaryFolder.resolve("transactionBook.csv"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
         StorageManager storage = new StorageManager(addressBookStorage, transactionBookStorage, userPrefsStorage);
@@ -183,7 +183,7 @@ public class LogicManagerTest {
             }
         };
 
-        CsvAdaptedTransactionStorage transactionBookStorage = new CsvAdaptedTransactionStorage(
+        CsvTransactionBookStorage transactionBookStorage = new CsvTransactionBookStorage(
                 temporaryFolder.resolve("ExceptionTransactionBook.csv")) {
             @Override
             public void saveTransactionBook(ReadOnlyTransactionBook transactionBook)

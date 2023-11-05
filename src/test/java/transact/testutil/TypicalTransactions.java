@@ -33,6 +33,17 @@ public class TypicalTransactions {
             new Description("Fish"),
             new Amount(6.50), new Date("15/11/18"));
 
+    // Manually Added
+    public static final Transaction TRANSACTION_REVENUE = new Transaction(TransactionType.REVENUE,
+            new Description("Revenue"),
+            new Amount(10.50), new Date("15/11/18"));
+    public static final Transaction TRANSACTION_EXPENSE = new Transaction(TransactionType.EXPENSE,
+            new Description("Expense"),
+            new Amount(5.50), new Date("15/11/18"));
+
+    private TypicalTransactions() {
+    } // prevents instantiation
+
     /**
      * Returns a {@code TransactionBook} with all the typical transactions.
      */

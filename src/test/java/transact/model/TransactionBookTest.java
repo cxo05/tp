@@ -41,22 +41,6 @@ public class TransactionBookTest {
         assertEquals(newData, transactionBook);
     }
 
-    // TODO Fix this test
-    @Test
-    public void resetData_withDuplicateTransactions_throwsDuplicateEntryException() {
-        // Two transactions with the same identity fields
-        // Transaction editedTrans = new
-        // TransactionBuilder(APPLES).withDescription("Apple 123").withAmount(10.00f)
-        // .build();
-        // Map<TransactionId, Transaction> newTransactions =
-        // FXCollections.observableHashMap();\
-        // TransactionBookTest.TransactionBookStub newData = new
-        // TransactionBookTest.TransactionBookStub(newTransactions);
-
-        // assertThrows(DuplicateEntryException.class, () ->
-        // transactionBook.resetData(newData));
-    }
-
     @Test
     public void hasTransaction_nullTransaction_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> transactionBook.hasTransaction(null));

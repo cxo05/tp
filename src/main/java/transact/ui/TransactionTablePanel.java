@@ -31,6 +31,7 @@ public class TransactionTablePanel extends UiPart<Region> {
      * Creates a {@code TransactionTablePanel} with the given
      * {@code ObservableList}.
      */
+    @SuppressWarnings("unchecked")
     public TransactionTablePanel(ObservableList<Transaction> transactionList, ObservableList<Person> personList) {
         super(FXML);
         TableColumn<Transaction, Integer> idCol = new TableColumn<>("Id");
@@ -56,7 +57,7 @@ public class TransactionTablePanel extends UiPart<Region> {
                     String staffName = getPersonName(t.getValue().getPersonId().toString(), personList);
                     displayString = t.getValue().getPersonId().toString() + " : " + staffName;
                 }
-                return new ReadOnlyObjectWrapper(displayString);
+                return new ReadOnlyObjectWrapper<String>(displayString);
             }
         });
 

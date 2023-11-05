@@ -26,7 +26,7 @@ import transact.model.TransactionBook;
 import transact.model.UserPrefs;
 import transact.model.util.SampleDataUtil;
 import transact.storage.AddressBookStorage;
-import transact.storage.CsvAdaptedTransactionStorage;
+import transact.storage.CsvTransactionBookStorage;
 import transact.storage.JsonAddressBookStorage;
 import transact.storage.JsonUserPrefsStorage;
 import transact.storage.Storage;
@@ -64,7 +64,8 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
-        TransactionBookStorage transactionBookStorage = new CsvAdaptedTransactionStorage(userPrefs.getTransactionBookFilePath());
+        TransactionBookStorage transactionBookStorage = new CsvTransactionBookStorage(
+                userPrefs.getTransactionBookFilePath());
         storage = new StorageManager(addressBookStorage, transactionBookStorage, userPrefsStorage);
 
         model = initModelManager(storage, userPrefs);
